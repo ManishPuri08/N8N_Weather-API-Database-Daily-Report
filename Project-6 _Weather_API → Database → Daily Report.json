@@ -1,0 +1,254 @@
+{
+  "name": "Project-6 :Weather/API → Database → Daily Report",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {}
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.4,
+      "position": [
+        -368,
+        -16
+      ],
+      "id": "b18acb31-e7e1-49dc-b19c-faf88d0340b5",
+      "name": "Schedule Trigger"
+    },
+    {
+      "parameters": {
+        "url": "http://api.weatherapi.com/v1/current.json?key=0f8c6c398f2d4c3caa190319261909&q=London&aqi=no",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.5,
+      "position": [
+        -176,
+        -16
+      ],
+      "id": "1b958c14-7862-49a0-8a84-1b2cc2de82ef",
+      "name": "HTTP Request"
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1Q2_Cdm5qsAOQ8pzf46Wd3leKIPt6D-rQ_f-7xPTICCA",
+          "mode": "list",
+          "cachedResultName": "Lead form",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1Q2_Cdm5qsAOQ8pzf46Wd3leKIPt6D-rQ_f-7xPTICCA/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 997506319,
+          "mode": "list",
+          "cachedResultName": "Weather",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1Q2_Cdm5qsAOQ8pzf46Wd3leKIPt6D-rQ_f-7xPTICCA/edit#gid=997506319"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Date": "={{ $json.location.localtime }}",
+            "Lat": "={{ $json.location.lat }}",
+            "Lon": "={{ $json.location.lon }}",
+            "City": "={{ $json.location.tz_id }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Date",
+              "displayName": "Date",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Lat",
+              "displayName": "Lat",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Lon",
+              "displayName": "Lon",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "City",
+              "displayName": "City",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        176,
+        -16
+      ],
+      "id": "f0af6772-74b6-4d2e-8d7a-ff5f9863f95c",
+      "name": "Append row in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "PKTIO7MputUsqAa3",
+          "name": "Google Sheets account 81"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sendTo": "ManishPuri484@Gmail.com",
+        "subject": "Weather",
+        "message": "=New weather update\n\nDate -{{ $json.Date }}\nLat -{{ $json.Lat }}\nLon -{{ $json.Lon }}\nCity -{{ $json.City }}\n",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        336,
+        -16
+      ],
+      "id": "f6285129-119a-496a-943c-4fca4cfdb316",
+      "name": "Send a message",
+      "webhookId": "e599b267-3d1e-4aeb-aaa4-6927d49af12b",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "wfgcVj1FfW6dxMX9",
+          "name": "Gmail account 104"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "30363fb0-5d00-41e9-9c02-84f813c35473",
+              "name": "location.country",
+              "value": "={{ $json.location.country }}",
+              "type": "string"
+            },
+            {
+              "id": "21889cf6-37b8-49d3-8796-6906c6861209",
+              "name": "location.lat",
+              "value": "={{ $json.location.lat }}",
+              "type": "number"
+            },
+            {
+              "id": "76e18001-b1b0-474e-9a96-d37fe929e0e8",
+              "name": "location.lon",
+              "value": "={{ $json.location.lon }}",
+              "type": "number"
+            },
+            {
+              "id": "60d50f2b-ed68-4b3c-9302-89c45c0728a4",
+              "name": "location.tz_id",
+              "value": "={{ $json.location.tz_id }}",
+              "type": "string"
+            },
+            {
+              "id": "01149bf2-005d-4dbb-a6e0-f6e061de6d5b",
+              "name": "location.localtime",
+              "value": "={{ $json.location.localtime }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.5,
+      "position": [
+        0,
+        -16
+      ],
+      "id": "cb08ede7-26d0-4f74-944f-015daef139be",
+      "name": "Edit Fields"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Append row in sheet": {
+      "main": [
+        [
+          {
+            "node": "Send a message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "Append row in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "f1c295c2-fe4c-4dfa-adc7-1f6ce6010dc3",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "e99e0d1157c9445a053edb1d8bcb3c19869f806f2b50808813faa4f314de9dd4"
+  },
+  "nodeGroups": [],
+  "id": "L0yCYpocTklOWjTe",
+  "tags": []
+}
